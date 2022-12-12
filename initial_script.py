@@ -68,20 +68,21 @@ with mp_hands.Hands(
       # Dibuja linea negra
       # cv2.line(image, (int(lm[tipIds[0]].x*w),int(lm[tipIds[0]].y*h)), (int(lm[tipIds[4]].x*w),int(lm[tipIds[4]].y*h)), (0,0,0), 2)
       # cv2.countNonZero(cv2.circle(image, (int(lm[tipIds[4]].x*w),int(lm[tipIds[4]].y*h)), 10, (0,0,255), -1))
-      if lm[tipIds[0]].y < lm[tipIds[1]].y and lm[tipIds[1]].y < lm[tipIds[2]].y and lm[tipIds[2]].y < lm[tipIds[3]].y and lm[tipIds[3]].y < lm[tipIds[4]].y:
-        cv2.putText(image, "Like", (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
+      # if lm[tipIds[0]].y < lm[tipIds[1]].y and lm[tipIds[1]].y < lm[tipIds[2]].y and lm[tipIds[2]].y < lm[tipIds[3]].y and lm[tipIds[3]].y < lm[tipIds[4]].y:
+      #   cv2.putText(image, "Like", (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
 
-      if lm[tipIds[0]].y > lm[tipIds[1]].y and lm[tipIds[1]].y > lm[tipIds[2]].y and lm[tipIds[2]].y > lm[tipIds[3]].y and lm[tipIds[3]].y > lm[tipIds[4]].y:
-        cv2.putText(image, "Dislike", (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
+      # if lm[tipIds[0]].y > lm[tipIds[1]].y and lm[tipIds[1]].y > lm[tipIds[2]].y and lm[tipIds[2]].y > lm[tipIds[3]].y and lm[tipIds[3]].y > lm[tipIds[4]].y:
+      #   cv2.putText(image, "Dislike", (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
       #OpenCV function to count the number of fingers up and draw a text on the image
       fingers = 0
-      for i in range(1,5):
-        if lm[tipIds[i]].y < lm[tipIds[i]-1].y:
-          fingers += 1
+      for i in range(0,5):
+        if i==0:
+          if lm[tipIds[i]].x < lm[tipIds[i]-1].x:
+            fingers += 1
+        else:
+          if lm[tipIds[i]].y < lm[tipIds[i]-1].y:
+            fingers += 1
       cv2.putText(image, str(fingers), (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
-
-
-
 
       # See other OpenCV functions to draw a line or a rectangle:
       # cv2.line(image, start_point, end_point, color, thickness) 
