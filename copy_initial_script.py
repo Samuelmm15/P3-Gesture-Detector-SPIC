@@ -5,6 +5,12 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
 
+# Funcion para saber si la mano es derecha o izquierda
+def rightHand(thumb_x,pinky_x):
+  if(thumb_x < pinky_x): # Comprueba la distancia x del pulgar al indice 
+    return True
+  return False
+
 cap = cv2.VideoCapture(0)
 with mp_hands.Hands(
     model_complexity=0,
@@ -56,25 +62,26 @@ with mp_hands.Hands(
       #height, width and depth (RGB=3) of image
       (h,w,d) = image.shape
 
-      # OpenCV function to draw a circle:
-      #cv2.circle(image, center_coordinates, radius in pixels, color (Blue 0-255, Green 0-255, Red 0-255), thickness in pixels (-1 solid))
-      # Example: draw a red solid circle of 10 pixel radius in the tip of pinky finger:
-      # cv2.circle(image, (int(lm[tipIds[4]].x*w),int(lm[tipIds[4]].y*h)), 10, (0,0,255), -1)
+      # Detecta mano derecha o izquierda
+      if(rightHand(thumb_tip,pinky_x)):       # Si es mano derecha
+        return (thumb_tip < thumb_bottom)    
+      else:                                   # Si es mano izquierda
+        return not (thumb_tip < thumb_bottom)
 
-      # OpenCV function to draw text on image
-      #cv2.putText(image, text, org, font, fontScale, color[, thickness[, lineType[, bottomLeftOrigin]]])
-      # Example: draw a blue "hello" on the upper left corner of the image
-      # cv2.putText(image, "hello", (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
-      # Dibuja linea negra
-      cv2.line(image, (int(lm[tipIds[0]].x*w),int(lm[tipIds[0]].y*h)), (int(lm[tipIds[4]].x*w),int(lm[tipIds[4]].y*h)), (0,0,0), 2)
-      cv2.countNonZero(cv2.circle(image, (int(lm[tipIds[4]].x*w),int(lm[tipIds[4]].y*h)), 10, (0,0,255), -1))
-      if lm[tipIds[0]].y < lm[tipIds[1]].y and lm[tipIds[1]].y < lm[tipIds[2]].y and lm[tipIds[2]].y < lm[tipIds[3]].y and lm[tipIds[3]].y < lm[tipIds[4]].y:
-        cv2.putText(image, "Like", (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
+      if((edit_mode == False) and thumb_up(lm)): 
+        edit_mode = True
+      # ACTIVAR MODO DIBUJO CON EL PULGAR HACIA ABAJO
+      elif((edit_mode == True) and thumb_down(lm)): 
+        edit_mode = False
+        coords_index.clear()
 
-      if lm[tipIds[0]].y > lm[tipIds[1]].y and lm[tipIds[1]].y > lm[tipIds[2]].y and lm[tipIds[2]].y > lm[tipIds[3]].y and lm[tipIds[3]].y > lm[tipIds[4]].y:
-        cv2.putText(image, "Dislike", (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
-      #OpenCV function to count the number of fingers up and draw a text on the image
-      # Fingers
+      # Detecta like o dislike
+      # if lm[tipIds[0]].y < lm[tipIds[1]].y and lm[tipIds[1]].y < lm[tipIds[2]].y and lm[tipIds[2]].y < lm[tipIds[3]].y and lm[tipIds[3]].y < lm[tipIds[4]].y:
+      #   cv2.putText(image, "Like", (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
+      # if lm[tipIds[0]].y > lm[tipIds[1]].y and lm[tipIds[1]].y > lm[tipIds[2]].y and lm[tipIds[2]].y > lm[tipIds[3]].y and lm[tipIds[3]].y > lm[tipIds[4]].y:
+      #   cv2.putText(image, "Dislike", (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
+
+      # Contador de dedos
       # fingers = 0
       # for i in range(0,5):
       #   if i==0:
@@ -84,10 +91,6 @@ with mp_hands.Hands(
       #     if lm[tipIds[i]].y < lm[tipIds[i]-1].y:
       #       fingers += 1
       # cv2.putText(image, str(fingers), (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
-
-      # See other OpenCV functions to draw a line or a rectangle:
-      # cv2.line(image, start_point, end_point, color, thickness) 
-      # cv2.rectangle(image, start_point (top-left), end_point (bottom-right), color, thickness)
 
     cv2.imshow('MediaPipe Hands', image)    
     
