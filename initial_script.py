@@ -71,11 +71,13 @@ with mp_hands.Hands(
       cv2.putText(image, str(fingers), (550,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
 
     # ACTIVAR LIKE O DISLIKE
-      if lm[tipIds[0]].y < lm[tipIds[1]].y and lm[tipIds[1]].y < lm[tipIds[2]].y and lm[tipIds[2]].y < lm[tipIds[3]].y and lm[tipIds[3]].y < lm[tipIds[4]].y:
-        cv2.putText(image, "Like", (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
+      if (fingers_aux == 1):
+        if lm[tipIds[0]].y < lm[tipIds[1]].y and lm[tipIds[1]].y < lm[tipIds[2]].y and lm[tipIds[2]].y < lm[tipIds[3]].y and lm[tipIds[3]].y < lm[tipIds[4]].y:
+          cv2.putText(image, "Like", (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
 
-      if lm[tipIds[0]].y > lm[tipIds[1]].y and lm[tipIds[1]].y > lm[tipIds[2]].y and lm[tipIds[2]].y > lm[tipIds[3]].y and lm[tipIds[3]].y > lm[tipIds[4]].y:
-        cv2.putText(image, "Dislike", (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
+      if (fingers_aux == 1):
+        if lm[tipIds[0]].y > lm[tipIds[1]].y and lm[tipIds[1]].y > lm[tipIds[2]].y and lm[tipIds[2]].y > lm[tipIds[3]].y and lm[tipIds[3]].y > lm[tipIds[4]].y:
+          cv2.putText(image, "Dislike", (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
 
     # ACTIVAR GESTO DE SIMBOLO DE PAZ
       if (fingers_aux == 2):
@@ -87,6 +89,10 @@ with mp_hands.Hands(
         if (lm[16].y < lm[12].y) and (lm[20].y < lm[16].y) and (abs(lm[20].x-lm[16].x) >= 0.08):
           cv2.putText(image, "Spiderman", (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
 
+    # ACTIVAR GESTO DE SIMBOLO DE OK
+      if (fingers_aux == 4):
+        if (lm[16].y < lm[12].y) and (lm[20].y < lm[16].y) and (abs(lm[20].x-lm[16].x) >= 0.08):
+          cv2.putText(image, "Piola", (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
 
     cv2.imshow('MediaPipe Hands', image)
 
