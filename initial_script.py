@@ -82,6 +82,12 @@ with mp_hands.Hands(
         if (lm[8].y < lm[6].y) and (lm[12].y < lm[10].y) and (abs(lm[12].x-lm[8].x) >= 0.08):
           cv2.putText(image, "Peace", (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
 
+    # ACTIVAR GESTO DE SIMBOLO DE SPIDERMAN
+      if (fingers_aux == 3):
+        if (lm[16].y < lm[12].y) and (lm[20].y < lm[16].y) and (abs(lm[20].x-lm[16].x) >= 0.08):
+          cv2.putText(image, "Spiderman", (20,60),cv2.FONT_HERSHEY_SIMPLEX,2,(255,0,0), thickness = 5)
+
+
     cv2.imshow('MediaPipe Hands', image)
 
     if cv2.waitKey(5) & 0xFF == 27:
